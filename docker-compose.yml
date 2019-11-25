@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  db:
+    image: mongo:3.4
+    container_name: tasks-mongodb
+    ports:
+      - '27017:27017'
+    restart: always
+    networks:
+      - tasks-network
+  server:
+    image: adrianoneres/taks-server
+    container_name: tasks-server
+    ports:
+      - '3000:3000'
+    restart: always
+    networks:
+      - tasks-network
+    depends_on:
+      - db
+  web:
+    image: adrianoneres/taks-web
+    container_name: tasks-web
+    ports:
+      - '1234:80'
+    restart: always
+    networks:
+      - tasks-network
+    depends_on:
+      - server
+networks:
+  tasks-network:
+    driver: bridge
